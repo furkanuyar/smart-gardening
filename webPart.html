@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang=''>
+<head>
+	<meta charset='utf-8'>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="styles.css">
+   <link rel="shortcut icon" href="/images/fav.ico" />
+   <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+   <script src="script.js"></script>
+<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<title>Smart Gardening</title>
+	<meta name="description" content="Smart Gardening">
+	<meta name="author" content="Furkan Uyar  @morris">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+h1{ margin-top: 5 cm;
+
+}
+</style>
+</head>
+<body>
+<center>
+<header>
+
+	<h1><div><button id="checkWater">CHECK WATER LEVEL</button></div>
+	<div><button id="watering">WATER</button></div>					<!-- buttons --> 
+	<div><button id="closeCover">CLOSE COVER</button></div></h1>
+
+
+	
+	<script src="http://cdn.pubnub.com/pubnub-3.7.1.min.js"></script>  <!-- including PubNub JavaScript SDK -->
+	<script>
+(function() {
+
+	var p = PUBNUB.init({
+		subscribe_key: 'sub-c-059fe690-cf78-11e5-b764-02ee2ddab7fe',
+		publish_key:   'pub-c-77f8ee30-f9ba-4b09-815a-3ba6309ca3ed'
+		// you can get unique keys from pubnub's web site.
+	});
+
+	
+	// Sending data
+	function check() {
+    p.publish({
+      channel : 'check',   // for checking humidity. 
+      message : 1
+    });
+  }
+  	function water() {
+    p.publish({
+      channel : 'water',    // for watering garden.
+      message : 2
+    });
+  }
+    function cover() {
+    p.publish({
+      channel : 'cover',    // for closing cover of garden.
+      message : 3
+    });
+  }
+
+  p.subscribe({
+		channel: 'new',
+		callback: function(m) {alert(m)}   // taking humidity value. 
+		})
+    // Click events
+  	checkWater.addEventListener('click', check);
+	watering.addEventListener('click', water);
+	closeCover.addEventListener('click', cover);
+})();
+	</script>
+
+
+</body>
+<html>
