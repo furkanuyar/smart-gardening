@@ -1,7 +1,7 @@
 from pubnub import Pubnub 
 import serial
 
-ser = serial.Serial('/dev/ttyACM0', 9600)  // Ardunio device
+ser = serial.Serial('/dev/ttyACM0', 9600)  # Arduino device 
 
 pubnub = Pubnub(publish_key='pub-c-***',        # you can get your unique pubnub key
 subscribe_key='sub-c-***')                      # from pubnub official site as a free
