@@ -1,52 +1,47 @@
-from pubnub import Pubnub 
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+from pubnub import Pubnub
 import serial
 
-ser = serial.Serial('/dev/ttyACM0', 9600)  # Arduino device 
+# Arduino device.
 
-pubnub = Pubnub(publish_key='pub-c-***',        # you can get your unique pubnub key
-subscribe_key='sub-c-***')                      # from pubnub official site as a free
-channel = 'check'
+ser = serial.Serial('/dev/ttyACM0', 9600)
+
+# Pub-sub operation credentials.
+
+pubnub = Pubnub(publish_key='pub-c-***', subscribe_key='sub-c-***')
+
+# Subscribes check, water and cover channels.
+
+pubnub.subscribe(channels='check', callback=_callback, error=_error)
+pubnub.subscribe(channels='water', callback=_callback, error=_error)
+pubnub.subscribe(channels='cover', callback=_callback, error=_error)
 
 
-
-def _callback(m, channel):
-        if m == 1:
-                def callback(message):
-                        print(message)
-                    
-
-                message=(ser.readline())
-                pubnub.publish(channel='new',message=message,callback=callback,error=callback)
-
-def _error(m):
-        print(m)
- 
-pubnub.subscribe(channels=channel, callback=_callback, error=_error)
-
-channel = 'water'
-
-def _callback(m, channel):
-        print(m)
-        if m == 2:
-                for i in range(1):
-                    ser.write('2')
-                    
+# If there is an error, sends to web part.
 
 def _error(m):
-        print(m)
- 
-pubnub.subscribe(channels=channel, callback=_callback, error=_error)
+    pubnub.publish(channel='error', message=message,
+                   callback=_callback, error=_error)
 
-channel = 'cover'
+
+# Gets messages and commands from web part
 
 def _callback(m, channel):
-        print(m)
-        if m == 3:
-                for i in range(1):
-                    ser.write('3')
-                    
 
-def _error(m):
-        print(m)
- 
-pubnub.subscribe(channels=channel, callback=_callback, error=_error)
+        # If message is 1, gets instant humidity value and sends to web part.
+
+    if m == 1:
+        message = ser.readline()
+        pubnub.publish(channel='new', message=message,
+                       callback=_callback, error=_error)
+    elif m == 2:
+
+        # If message is 2, sends message to arduino part to trigger watering.
+
+        ser.write('2')
+    elif m == 3:
+
+        # If message is 3, sends message to arduino part to trigger close and open cover.
+
+        ser.write('3')
