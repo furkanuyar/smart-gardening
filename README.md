@@ -24,3 +24,10 @@ This project automates garden care using real-time soil humidity data and remote
 - **Arduino** for sensor control and automation logic  
 - **Raspberry Pi** for internet connectivity and remote interface  
 - Web or mobile interface for remote access
+
+## Demo
+
+Click the image below to watch the demo on YouTube:
+
+[![Smart Gardening Demo](https://img.youtube.com/vi/rkCfrBqMAKs/0.jpg)](https://www.youtube.com/watch?v=rkCfrBqMAKs&t=2s)
+
